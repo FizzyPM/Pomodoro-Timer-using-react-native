@@ -8,7 +8,7 @@ class Count extends React.Component {
 	}																							
 	render() {
 		return (
-			<Text style={{ fontSize: 50 }}>{this.props.min}:{this.props.sec}</Text>
+			<Text style={{ fontSize: 70 }}>{this.props.min}:{this.props.sec}</Text>
 		);
 	}
 }
@@ -18,7 +18,8 @@ export default class App extends React.Component {
 		super();
 		this.state={
 			min : '00',
-			sec : '10',
+			prevmin : '00',
+			sec : '00',
 			isOn : false,
 			completed : false,
 		}
@@ -53,23 +54,43 @@ export default class App extends React.Component {
 		}
 	}
 	handleReset = () => {
-		this.setState({ min : '00', sec : '10' })
+		this.setState(prevState => ({ min : prevState.prevmin, sec : '00' }))
 		this.setState({ completed : false })
 		this.setState({ isOn : false })
 	}
-	toggleisOn = () => {
-		this.setState(prevState =>({ isOn : !prevState.isOn }))
+	handlePlay = () => {
+		this.setState({ isOn : true })
 		// console.log(this.state.isOn);
+	}
+	handlePause = () => {
+		this.setState({ isOn : false })
+	}
+	setPomodoro = () => {
+		this.setState({ min: '25', sec: '00', prevmin: '25', completed : false, isOn : false })
+	}
+	setShortbr = () => {
+		this.setState({ min: '05', sec: '00', prevmin: '05', completed : false, isOn : false })
+	}
+	setLongbr = () => {
+		this.setState({ min: '15', sec: '00', prevmin: '15', completed : false, isOn : false })
 	}
 	render() {
 		return (
 			<View style={styles.container}>
-				<Count min={this.state.min} sec={this.state.sec} comp={this.state.completed}/>
-				<View style={{flexDirection: "row"}}>
-				<Button title='Reset' onPress={this.handleReset} />
-				<Button title='Play' onPress={this.toggleisOn} />
-				<Button title='Pause' onPress={this.toggleisOn} />
+				<View style={{ alignItems: 'center', bottom: '25%' }}>
+					<Count min={this.state.min} sec={this.state.sec} comp={this.state.completed}/>
 				</View>
+				<View style={{ justifyContent: 'space-around', flexDirection: 'row', bottom: '30%' }}>
+					<Button title='Reset' onPress={this.handleReset} />
+					<Button title='Play' onPress={this.handlePlay} />
+					<Button title='Pause' onPress={this.handlePause} />
+				</View>
+				<View style={{ flexDirection: 'row', justifyContent: 'space-around', bottom: '20%' }}>
+					<Button title='Pomodoro' onPress={this.setPomodoro} />
+					<Button title='Short-break' onPress={this.setShortbr} />
+					<Button title='Long-break' onPress={this.setLongbr} />
+				</View>
+
 			</View>
 		);
 	}
@@ -79,7 +100,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#fff',
-		alignItems: 'center',
 		justifyContent: 'center',
 	},
 });
