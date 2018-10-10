@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import {vibrate} from './utils'
+import Todo from './todo.js'
 
 class Count extends React.Component {
 	shouldComponentUpdate(){
@@ -18,7 +19,7 @@ export default class App extends React.Component {
 		super();
 		this.state={
 			min : '00',
-			prevmin : '00',
+			resetprev : '00',
 			sec : '00',
 			isOn : false,
 			completed : false,
@@ -54,7 +55,7 @@ export default class App extends React.Component {
 		}
 	}
 	handleReset = () => {
-		this.setState(prevState => ({ min : prevState.prevmin, sec : '00' }))
+		this.setState(prevState => ({ min : prevState.resetprev, sec : '00' }))
 		this.setState({ completed : false })
 		this.setState({ isOn : false })
 	}
@@ -66,31 +67,33 @@ export default class App extends React.Component {
 		this.setState({ isOn : false })
 	}
 	setPomodoro = () => {
-		this.setState({ min: '25', sec: '00', prevmin: '25', completed : false, isOn : false })
+		this.setState({ min: '25', sec: '00', resetprev: '25', completed : false, isOn : false })
 	}
 	setShortbr = () => {
-		this.setState({ min: '05', sec: '00', prevmin: '05', completed : false, isOn : false })
+		this.setState({ min: '05', sec: '00', resetprev: '05', completed : false, isOn : false })
 	}
 	setLongbr = () => {
-		this.setState({ min: '15', sec: '00', prevmin: '15', completed : false, isOn : false })
+		this.setState({ min: '15', sec: '00', resetprev: '15', completed : false, isOn : false })
 	}
 	render() {
 		return (
 			<View style={styles.container}>
-				<View style={{ alignItems: 'center', bottom: '25%' }}>
+				<View style={{ alignItems: 'center', flex: 3, justifyContent: 'center', }}>
 					<Count min={this.state.min} sec={this.state.sec} comp={this.state.completed}/>
 				</View>
-				<View style={{ justifyContent: 'space-around', flexDirection: 'row', bottom: '30%' }}>
+				<View style={{ justifyContent: 'space-around', flexDirection: 'row', flex: 1, alignItems: 'center' }}>
 					<Button title='Reset' onPress={this.handleReset} />
 					<Button title='Play' onPress={this.handlePlay} />
 					<Button title='Pause' onPress={this.handlePause} />
 				</View>
-				<View style={{ flexDirection: 'row', justifyContent: 'space-around', bottom: '20%' }}>
+				<View style={{ flexDirection: 'row', justifyContent: 'space-around', flex: 1, alignItems: 'flex-start' }}>
 					<Button title='Pomodoro' onPress={this.setPomodoro} />
 					<Button title='Short-break' onPress={this.setShortbr} />
 					<Button title='Long-break' onPress={this.setLongbr} />
 				</View>
-
+				<View style={{ flex: 5 }}>
+					<Todo/>
+				</View>
 			</View>
 		);
 	}
